@@ -1,5 +1,5 @@
+const {Tapable} = require('tapable');
 
-const Tapable = require('tapable');
 
 
 class Compiler extends Tapable {
@@ -7,10 +7,8 @@ class Compiler extends Tapable {
         super();
         this.context = context;
     }
-    run(callback) {
-
-    }
+    run(callback) { }
 }
 
 
-module.exports.Compiler = Compiler;
+module.exports = Compiler;
