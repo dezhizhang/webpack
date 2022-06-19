@@ -3,6 +3,7 @@ const { Tapable, SyncHook } = require('tapable');
 const NormalModuleFactory = require('./NormalModuleFactory');
 const Parser = require('./Parser');
 const async = require('neo-async');
+const Chunk = require('./Chunk');
 const parser = new Parser();
 const normalModuleFactory = new NormalModuleFactory();
 
@@ -17,11 +18,15 @@ class Compilation extends Tapable {
         this.outputFileSystem = compiler.outputFileSystem;
         this.enteries = [];
         this.modules = [];
+        this.chunks = [];
         this._modules = {
             
         }
         this.hooks = {
-            succeedModule: new SyncHook(['module'])
+            succeedModule: new SyncHook(['module']),
+            seal:new SyncHook(),
+            beforeChunks:new SyncHook(),
+            afterChunks:new SyncHook(),
         }
     }
 
@@ -80,6 +85,31 @@ class Compilation extends Tapable {
         }
 
         this.buildModule(module, afterBuild);
+    }
+    seal(callback) {
+        this.hooks.seal.call();
+        this.hooks.beforeChunks.call();
+        for(const entryModule of this.enteries) {
+            const chunk = new Chunk(entryModule);
+            this.chunks.push(chunk);
+            chunk.modules = this.modules.filter(module => module.name === chunk.name);
+        }
+        this.hooks.afterChunks.call(this.chunks);
+        this.createChunkAssets();
+        callback();
+    }
+    createChunkAssets() {
+        for(let i=0;i < this.chunks.length;i++) {
+            const chunk = this.chunks[i];
+            const file = chunk.name + '.js';
+            chunk.files.push(file);
+            let source = '';
+            this.emitAssets(file,source)
+        }
+    }
+
+    emitAssets(file,source) {
+        
     }
 }
 
