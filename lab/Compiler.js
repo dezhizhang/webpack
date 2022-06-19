@@ -1,7 +1,7 @@
 const {Tapable, SyncBailHook, AsyncParallelHook, AsyncSeriesHook, SyncHook} = require('tapable');
 const NormalModuleFactory = require('./NormalModuleFactory')
 const Compilation = require('./Compilation');
-const Stats = require('./Stats');
+const { Stats } = require('webpack');
 
 
 class Compiler extends Tapable {

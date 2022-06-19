@@ -52,6 +52,14 @@ class Compilation extends Tapable {
         let dependencies = module.dependencies;
         async.forEach(dependencies,(dependency,done) => {
             let { name,context,rawRequest,resource,moduleId } = dependency;
+            this.createModule({
+                name,
+                context,
+                rawRequest,
+                parser,
+                resource,
+                moduleId
+            },null,done)
         },callback)
     }
     //创建并编译模块
@@ -71,7 +79,7 @@ class Compilation extends Tapable {
             }
         }
 
-        this.buildModule(entryModule, afterBuild);
+        this.buildModule(module, afterBuild);
     }
 }
 

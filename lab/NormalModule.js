@@ -5,7 +5,7 @@ const generate = require('babel-generator').default;
 const traverse = require('babel-traverse').default;
 
 class NormalModule{
-    constructor({name,context,rawRequest,resource,parser}) {
+    constructor({name,context,rawRequest,resource,parser,moduleId}) {
         this.name = name;
         this.context = context;
         this.rawRequest = rawRequest;
@@ -13,6 +13,7 @@ class NormalModule{
         this.parser = parser;
         this._source;
         this._ast;
+        this.moduleId = moduleId;
         this.dependencies = [];
     }
     build(compilation,callback) {
