@@ -1,11 +1,13 @@
 
+const fs = require('fs');
 
 class NodeEnvironmentPlugin {
-    constructor() {
-
+    constructor(options) {
+        this.options = options || {};
     }
-    apply() {
-        
+    apply(compiler) {
+        compiler.inputFileSystem = fs;
+        compiler.outputFileSystem = fs;
     }
 }
 

@@ -18,7 +18,25 @@ class Compiler extends Tapable {
         }
     }
     run(callback) { 
+        console.log('compiler run ')
+        const finalCallback = (err,stats) => {
+            callback(err,stats)
+        }
 
+        const onCompiled = (err,compilation) => {
+            console.log('onCompiled');
+            finalCallback(err,{
+                entries:[],
+                chunks:[],
+                module:[],
+                assets:[],
+            })
+        }
+        this.hooks.beforeRun,callback(this,err => {
+            this.hooks.run.callAsync(this,err => {
+                this.compile(onCompiled);
+            })
+        })
     }
     compile(onCompiled) {
         const params = this.newCompilationParams();

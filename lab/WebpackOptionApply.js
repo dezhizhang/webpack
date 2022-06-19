@@ -1,9 +1,10 @@
+const EntryOptionPlugin = require('./EntryOptionPlugin')
 
-class WebpackOptionApply{
+class WebpackOptionsApply{
     process(options,compiler) {
         new EntryOptionPlugin().apply(compiler);
         compiler.hooks.entryOption.call(options.context,options.entry);
     }
 }
 
-module.exports = WebpackOptionApply
+module.exports = WebpackOptionsApply;

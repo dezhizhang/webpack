@@ -1,6 +1,7 @@
+
 const Compiler = require('./Compiler')
 const NodeEnvironmentPlugin = require('./node/NodeEnvironmentPlugin');
-
+const WebpackOptionsApply = require('./WebpackOptionApply');
 const webpack = (options) => {
     let compiler = new Compiler(options.context);
     compiler.options = options;
@@ -12,7 +13,7 @@ const webpack = (options) => {
             plugin.apply(compiler)
         }
     }
-
+    new WebpackOptionsApply().process(options,compiler)
     return compiler;
 }
 
