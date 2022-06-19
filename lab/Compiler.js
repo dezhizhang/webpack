@@ -1,6 +1,8 @@
 const {Tapable, SyncBailHook, AsyncParallelHook, AsyncSeriesHook, SyncHook} = require('tapable');
 const NormalModuleFactory = require('./NormalModuleFactory')
-const Compilation = require('./Compilation')
+const Compilation = require('./Compilation');
+const Stats = require('./Stats');
+
 
 class Compiler extends Tapable {
     constructor(context) {
@@ -25,12 +27,7 @@ class Compiler extends Tapable {
 
         const onCompiled = (err,compilation) => {
             console.log('onCompiled');
-            finalCallback(err,{
-                entries:[],
-                chunks:[],
-                module:[],
-                assets:[],
-            })
+            finalCallback(err,new Stats(compilation))
         }
         this.hooks.beforeRun,callback(this,err => {
             this.hooks.run.callAsync(this,err => {
@@ -45,7 +42,7 @@ class Compiler extends Tapable {
             const compilation = this.newCompilation(params);
             this.hooks.make.callAsync(compilation,err => {
                 console.log('make完成')
-                onCompiled();
+                onCompiled(err,compilation);
             })
         })
     }
