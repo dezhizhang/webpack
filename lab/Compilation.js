@@ -37,8 +37,20 @@ class Compilation extends Tapable{
         });
         this.enteries.push(entryModule);
         this.modules.push(entryModule);
-    }
 
+        const afterBuild = (err) => {
+            return callback(err,module);
+        }
+
+        this.buildModule(entryModule,afterBuild);
+    }
+    
+    buildModule(module,afterBuild) {
+        module.build(this,(err) => {
+            this.hooks.succeedModule.call(module);
+            afterBuild(err);
+        })
+    }
 }
 
 module.exports = Compilation;
