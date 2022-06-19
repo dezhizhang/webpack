@@ -1,6 +1,8 @@
+const path = require('path')
 const { Tapable, SyncHook } = require('tapable');
 const NormalModuleFactory = require('./NormalModuleFactory');
-
+const Parser = require('./Parser');
+const parser = new Parser();
 const normalModuleFactory = new NormalModuleFactory();
 
 
@@ -30,7 +32,8 @@ class Compilation extends Tapable{
             name,
             context,
             rawRequest,
-            resource:path.posix.join(context,entry)
+            resource:path.posix.join(context,entry),
+            parser
         });
         this.enteries.push(entryModule);
         this.modules.push(entryModule);
